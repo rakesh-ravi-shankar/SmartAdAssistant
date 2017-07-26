@@ -2,10 +2,11 @@ from Crypto.Cipher import AES
 import simplejson as json
 import base64
 import hashlib
+import getpass
 
 # Create an instance of AES cipher
 def get_cipher():
-	key = raw_input('Enter the passcode: ')
+	key = getpass.getpass('Enter the passcode: ')
 	key = hashlib.sha256(key.encode()).digest()
 	mode = AES.MODE_CBC
 	IV = 16 * '\x00'
