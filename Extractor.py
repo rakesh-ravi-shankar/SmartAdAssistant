@@ -4,6 +4,7 @@ import helpers
 class ExtractorBase(object):
 	def __init__(self, seed_hashtag):
 		self.seed_hashtag = seed_hashtag
+		self.hashtag_dict = {}
 
 	# Get the decrypted auth credentials
 	def get_auth_credentials(self):
@@ -31,7 +32,20 @@ class ExtractorBase(object):
 	# TODO: Add logic to this template function
 	# Extract co-occuring hashtags
 	def extract_hashtags_per_tweet(self, tweets_list):
-		pass
+		for tweet in tweets_list:
+			tweet_id = tweet.id_str;
+			for hashtag in tweet.entities['hashtags']:
+				hastagText = hashtag['text']
+				self.add_hashtag_to_dict(hastagText,tweet_id)
+		print self.hashtag_dict
+
+	def add_hashtag_to_dict(self, hashtag, tweet_id):
+		if hashtag in self.hashtag_dict:
+			self.hashtag_dict[hashtag].add(tweet_id)
+		else:
+			self.hashtag_dict[hashtag] = set([tweet_id])
+
+
 
 
 	# TODO: Add logic to this template function
