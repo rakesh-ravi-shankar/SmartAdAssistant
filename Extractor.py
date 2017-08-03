@@ -29,15 +29,13 @@ class ExtractorBase(object):
 		return api.search(q=self.seed_hashtag, count=100)
 
 
-	# TODO: Add logic to this template function
 	# Extract co-occuring hashtags
 	def extract_hashtags_per_tweet(self, tweets_list):
 		for tweet in tweets_list:
 			tweet_id = tweet.id_str;
 			for hashtag in tweet.entities['hashtags']:
-				hastagText = hashtag['text']
-				self.add_hashtag_to_dict(hastagText,tweet_id)
-		print self.hashtag_dict
+				hastagText = hashtag['text'].encode("ascii", "replace").lower()
+				self.add_hashtag_to_dict(hastagText, tweet_id)
 
 	def add_hashtag_to_dict(self, hashtag, tweet_id):
 		if hashtag in self.hashtag_dict:
@@ -46,9 +44,10 @@ class ExtractorBase(object):
 			self.hashtag_dict[hashtag] = set([tweet_id])
 
 
-
-
-	# TODO: Add logic to this template function
 	# Rank co-occuring hashtags
-	def rank_hashtags(self, formatted_tweet):
-		pass
+	def rank_hashtags(self):
+		return map(lambda sorted_hashtag_tuple: sorted_hashtag_tuple[0], sorted(self.hashtag_dict.items(), key= lambda x: len(x[1]), reverse=True))
+
+
+
+
